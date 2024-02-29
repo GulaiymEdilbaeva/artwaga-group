@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User List App</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>User List</h1>
+      <div id="filters" class="filters">
+        <button id="refreshButton">Refresh button</button>
+        <select id="sortSelect">
+          <option value="name">Sort by Name</option>
+          <option value="email">Sort by Email</option>
+        </select>
+
+        <input
+          type="text"
+          id="filterInput"
+          placeholder="Filter by Name or Email"
+        />
+      </div>
+      <div id="userList" class="user-list"></div>
+    </div>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
