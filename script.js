@@ -6,14 +6,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let users = [];
 
-  refreshButton.addEventListener("click", function () {
-    getUsers();
-  });
+  refreshButton.addEventListener("click", getUsers);
+  sortSelect.addEventListener("change", sortUsers);
+  filterInput.addEventListener("input", filterUsers);
 
-  sortSelect.addEventListener("change", function () {
-    const sortBy = this.value;
-    sortUsers(sortBy);
-  });
   getUsers();
 
   function getUsers() {
@@ -30,35 +26,9 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
-        userListDiv.innerHTML =
-          "<p>Error fetching users. Please try again later.</p>";
       });
   }
 
-  function renderUsers(usersToRender) {
-    userListDiv.innerHTML = "";
-    usersToRender.forEach((user) => {
-      const userCard = document.createElement("div");
-      userCard.classList.add("user-card");
-      userCard.innerHTML = `
-                <h2>${user.name}</h2>
-                <p>Email: ${user.email}</p>
-                <p>Phone: ${user.phone}</p>
-            `;
-      userListDiv.appendChild(userCard);
-    });
-  }
-
-  function sortUsers(sortBy) {
-    const sortedUsers = users.slice().sort((a, b) => {
-      if (sortBy === "name") {
-        return a.name.localeCompare(b.name);
-      } else if (sortBy === "email") {
-        return a.email.localeCompare(b.email);
-      }
-    });
-    renderUsers(sortedUsers);
-  }
   function renderUsers(usersToRender) {
     userListDiv.innerHTML = "";
 
@@ -69,25 +39,36 @@ document.addEventListener("DOMContentLoaded", function () {
         const userCard = document.createElement("div");
         userCard.classList.add("user-card");
         userCard.innerHTML = `
-                <h2>${user.name}</h2>
-                <p>Email: ${user.email}</p>
-                <p>Phone: ${user.phone}</p>
-            `;
+            <h2>${user.name}</h2>
+            <p>Email: ${user.email}</p>
+            <p>Phone: ${user.phone}</p>
+          `;
         userListDiv.appendChild(userCard);
       });
     }
   }
 
+  function sortUsers() {
+    const sortBy = sortSelect.value;
+    const sortedUsers = [...users].sort((a, b) => {
+      if (sortBy === "name") {
+        return a.name.localeCompare(b.name);
+      } else if (sortBy === "email") {
+        return a.email.localeCompare(b.email);
+      }
+    });
+    renderUsers(sortedUsers);
+  }
+
   function filterUsers() {
-    const filterValue = filterInput.value.toLowerCase();
+    const filterValue = filterInput.value.trim().toLowerCase();
     const filteredUsers = users.filter((user) => {
       return (
         user.name.toLowerCase().includes(filterValue) ||
-        user.email.toLowerCase().includes(filterValue)
+        user.email.toLowerCase().includes(filterValue) ||
+        user.phone.includes(filterValue)
       );
     });
     renderUsers(filteredUsers);
   }
-
-  filterInput.addEventListener("input", filterUsers);
 });
